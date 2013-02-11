@@ -1,0 +1,113 @@
+package candygame;
+
+import java.util.Scanner;
+
+/**
+ * Simulates a game where children pass candy clockwise in a circle. The initial
+ * distribution of candy as well as the amount of players is determined by the
+ * user. Each turn the children pass half their candy to the person to their
+ * right. If they have an odd number of candy at the end of the turn they are
+ * given one extra piece. Game is over when all children have the same amount of
+ * candy.
+ *
+ * @author Shane Hobensack
+ * @version Feb 6, 2013
+ */
+public class CandyGameTester {
+
+    public static void main(String[] args) {
+        int numChildren = 0;
+
+        // Check for at least one player
+        while (numChildren == 0) {
+            System.out.print("How many children? ");
+            Scanner scanner = new Scanner(System.in);
+            numChildren = scanner.nextInt();
+            if (numChildren == 0) {
+                System.out.println("Need at least 1 player!");
+            } else {
+                break;
+            }
+        }
+        int[] candyArray = new int[numChildren];
+        
+        System.out.print("Enter initial candy distribution for each player"
+                + "\n(Each player must have an even number of candy!): ");
+        Scanner scanner = new Scanner(System.in);
+
+
+        for (int i = 0; i < numChildren; i++) {
+            candyArray[i] = scanner.nextInt();
+        }
+        
+        CandyGame candygame = new CandyGame(candyArray);
+        
+        
+        // Start game...
+        // while(!candygame.done()) {
+            candygame.next();
+            candygame.getString();
+            
+        //}
+        
+        System.out.println("GAME OVER");
+        System.exit(0);
+
+    }
+}
+
+class CandyGame {
+
+    private int[] candy;
+
+    public CandyGame(int[] candy) {
+        this.candy = new int[candy.length];
+        // System.arraycopy(candy, 0, this.candy, 0, candy.length);
+        for (int i = 0; i < candy.length; i++) {
+            this.candy[i] = candy[i];
+        }
+    }
+
+    /**
+     * Checks if everyone has the same amount of candy.
+     * @return True if game is done, other wise false.
+     */
+    public boolean done() {
+        int count = 0;
+        for (int i = 0; i < candy.length; i++) {
+            if (candy[i] == candy[0]) {
+                count++;
+            }
+        }
+        if (count == candy.length) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Updates the distribution of candy after a command from the teacher
+     */
+    public void next() {
+        
+        for (int i = 0; i <= candy.length - 1; i++) {
+            candy[i] /= 2;
+        }
+        
+        candy[0] += candy[candy.length - 1];
+        candy[1] += candy[0];
+        candy[2] += candy[1];
+        candy[3] += candy[2];
+        
+        
+        
+    }
+
+    public void getString() {
+        for (int i = 0; i < candy.length; i++) {
+           System.out.print(candy[i] + " "); 
+        }
+        System.out.println();
+    }
+}
